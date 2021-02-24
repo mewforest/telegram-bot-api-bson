@@ -12,17 +12,17 @@ import (
 // APIResponse is a response from the Telegram API with the result
 // stored raw.
 type APIResponse struct {
-	Ok          bool                `json:"ok"`
-	Result      json.RawMessage     `json:"result"`
-	ErrorCode   int                 `json:"error_code"`
-	Description string              `json:"description"`
-	Parameters  *ResponseParameters `json:"parameters"`
+	Ok          bool                `json:"ok" bson:"ok"`
+	Result      json.RawMessage     `json:"result" bson:"result"`
+	ErrorCode   int                 `json:"error_code" bson:"error_code"`
+	Description string              `json:"description" bson:"description"`
+	Parameters  *ResponseParameters `json:"parameters" bson:"parameters"`
 }
 
 // ResponseParameters are various errors that can be returned in APIResponse.
 type ResponseParameters struct {
-	MigrateToChatID int64 `json:"migrate_to_chat_id"` // optional
-	RetryAfter      int   `json:"retry_after"`        // optional
+	MigrateToChatID int64 `json:"migrate_to_chat_id" bson:"migrate_to_chat_id"` // optional
+	RetryAfter      int   `json:"retry_after" bson:"retry_after"`        // optional
 }
 
 // Update is an update response, from GetUpdates.
@@ -34,46 +34,46 @@ type Update struct {
 	// the correct update sequence, should they get out of order.
 	// If there are no new updates for at least a week, then identifier
 	// of the next update will be chosen randomly instead of sequentially.
-	UpdateID int `json:"update_id"`
+	UpdateID int `json:"update_id" bson:"update_id"`
 	// Message new incoming message of any kind — text, photo, sticker, etc.
 	//
 	// optional
-	Message *Message `json:"message"`
+	Message *Message `json:"message" bson:"message"`
 	// EditedMessage
 	//
 	// optional
-	EditedMessage *Message `json:"edited_message"`
+	EditedMessage *Message `json:"edited_message" bson:"edited_message"`
 	// ChannelPost new version of a message that is known to the bot and was edited
 	//
 	// optional
-	ChannelPost *Message `json:"channel_post"`
+	ChannelPost *Message `json:"channel_post" bson:"channel_post"`
 	// EditedChannelPost new incoming channel post of any kind — text, photo, sticker, etc.
 	//
 	// optional
-	EditedChannelPost *Message `json:"edited_channel_post"`
+	EditedChannelPost *Message `json:"edited_channel_post" bson:"edited_channel_post"`
 	// InlineQuery new incoming inline query
 	//
 	// optional
-	InlineQuery *InlineQuery `json:"inline_query"`
+	InlineQuery *InlineQuery `json:"inline_query" bson:"inline_query"`
 	// ChosenInlineResult is the result of an inline query
 	// that was chosen by a user and sent to their chat partner.
 	// Please see our documentation on the feedback collecting
 	// for details on how to enable these updates for your bot.
 	//
 	// optional
-	ChosenInlineResult *ChosenInlineResult `json:"chosen_inline_result"`
+	ChosenInlineResult *ChosenInlineResult `json:"chosen_inline_result" bson:"chosen_inline_result"`
 	// CallbackQuery new incoming callback query
 	//
 	// optional
-	CallbackQuery *CallbackQuery `json:"callback_query"`
+	CallbackQuery *CallbackQuery `json:"callback_query" bson:"callback_query"`
 	// ShippingQuery new incoming shipping query. Only for invoices with flexible price
 	//
 	// optional
-	ShippingQuery *ShippingQuery `json:"shipping_query"`
+	ShippingQuery *ShippingQuery `json:"shipping_query" bson:"shipping_query"`
 	// PreCheckoutQuery new incoming pre-checkout query. Contains full information about checkout
 	//
 	// optional
-	PreCheckoutQuery *PreCheckoutQuery `json:"pre_checkout_query"`
+	PreCheckoutQuery *PreCheckoutQuery `json:"pre_checkout_query" bson:"pre_checkout_query"`
 }
 
 // UpdatesChannel is the channel for getting updates.
@@ -89,26 +89,26 @@ func (ch UpdatesChannel) Clear() {
 // User represents a Telegram user or bot.
 type User struct {
 	// ID is a unique identifier for this user or bot
-	ID int `json:"id"`
+	ID int `json:"id" bson:"_id,omitempty"`
 	// FirstName user's or bot's first name
-	FirstName string `json:"first_name"`
+	FirstName string `json:"first_name" bson:"first_name"`
 	// LastName user's or bot's last name
 	//
 	// optional
-	LastName string `json:"last_name"`
+	LastName string `json:"last_name" bson:"last_name"`
 	// UserName user's or bot's username
 	//
 	// optional
-	UserName string `json:"username"`
+	UserName string `json:"username" bson:"username"`
 	// LanguageCode IETF language tag of the user's language
 	// more info: https://en.wikipedia.org/wiki/IETF_language_tag
 	//
 	// optional
-	LanguageCode string `json:"language_code"`
+	LanguageCode string `json:"language_code" bson:"language_code"`
 	// IsBot true, if this user is a bot
 	//
 	// optional
-	IsBot bool `json:"is_bot"`
+	IsBot bool `json:"is_bot" bson:"is_bot"`
 }
 
 // String displays a simple text version of a user.
@@ -133,8 +133,8 @@ func (u *User) String() string {
 
 // GroupChat is a group chat.
 type GroupChat struct {
-	ID    int    `json:"id"`
-	Title string `json:"title"`
+	ID    int    `json:"id" bson:"_id,omitempty"`
+	Title string `json:"title" bson:"title"`
 }
 
 // ChatPhoto represents a chat photo.
@@ -142,55 +142,55 @@ type ChatPhoto struct {
 	// SmallFileID is a file identifier of small (160x160) chat photo.
 	// This file_id can be used only for photo download and
 	// only for as long as the photo is not changed.
-	SmallFileID string `json:"small_file_id"`
+	SmallFileID string `json:"small_file_id" bson:"small_file_id"`
 	// BigFileID is a file identifier of big (640x640) chat photo.
 	// This file_id can be used only for photo download and
 	// only for as long as the photo is not changed.
-	BigFileID string `json:"big_file_id"`
+	BigFileID string `json:"big_file_id" bson:"big_file_id"`
 }
 
 // Chat contains information about the place a message was sent.
 type Chat struct {
 	// ID is a unique identifier for this chat
-	ID int64 `json:"id"`
+	ID int64 `json:"id" bson:"_id,omitempty"`
 	// Type of chat, can be either “private”, “group”, “supergroup” or “channel”
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// Title for supergroups, channels and group chats
 	//
 	// optional
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// UserName for private chats, supergroups and channels if available
 	//
 	// optional
-	UserName string `json:"username"`
+	UserName string `json:"username" bson:"username"`
 	// FirstName of the other party in a private chat
 	//
 	// optional
-	FirstName string `json:"first_name"`
+	FirstName string `json:"first_name" bson:"first_name"`
 	// LastName of the other party in a private chat
 	//
 	// optional
-	LastName string `json:"last_name"`
+	LastName string `json:"last_name" bson:"last_name"`
 	// AllMembersAreAdmins
 	//
 	// optional
-	AllMembersAreAdmins bool `json:"all_members_are_administrators"`
+	AllMembersAreAdmins bool `json:"all_members_are_administrators" bson:"all_members_are_administrators"`
 	// Photo is a chat photo
-	Photo *ChatPhoto `json:"photo"`
+	Photo *ChatPhoto `json:"photo" bson:"photo"`
 	// Description for groups, supergroups and channel chats
 	//
 	// optional
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" bson:"description,omitempty"`
 	// InviteLink is a chat invite link, for groups, supergroups and channel chats.
 	// Each administrator in a chat generates their own invite links,
 	// so the bot must first generate the link using exportChatInviteLink
 	//
 	// optional
-	InviteLink string `json:"invite_link,omitempty"`
+	InviteLink string `json:"invite_link,omitempty" bson:"invite_link,omitempty"`
 	// PinnedMessage Pinned message, for groups, supergroups and channels
 	//
 	// optional
-	PinnedMessage *Message `json:"pinned_message"`
+	PinnedMessage *Message `json:"pinned_message" bson:"pinned_message"`
 }
 
 // IsPrivate returns if the Chat is a private conversation.
@@ -222,148 +222,148 @@ func (c Chat) ChatConfig() ChatConfig {
 // almost anything.
 type Message struct {
 	// MessageID is a unique message identifier inside this chat
-	MessageID int `json:"message_id"`
+	MessageID int `json:"message_id" bson:"message_id"`
 	// From is a sender, empty for messages sent to channels;
 	//
 	// optional
-	From *User `json:"from"`
+	From *User `json:"from" bson:"from"`
 	// Date of the message was sent in Unix time
-	Date int `json:"date"`
+	Date int `json:"date" bson:"date"`
 	// Chat is the conversation the message belongs to
-	Chat *Chat `json:"chat"`
+	Chat *Chat `json:"chat" bson:"chat"`
 	// ForwardFrom for forwarded messages, sender of the original message;
 	//
 	// optional
-	ForwardFrom *User `json:"forward_from"`
+	ForwardFrom *User `json:"forward_from" bson:"forward_from"`
 	// ForwardFromChat for messages forwarded from channels,
 	// information about the original channel;
 	//
 	// optional
-	ForwardFromChat *Chat `json:"forward_from_chat"`
+	ForwardFromChat *Chat `json:"forward_from_chat" bson:"forward_from_chat"`
 	// ForwardFromMessageID for messages forwarded from channels,
 	// identifier of the original message in the channel;
 	//
 	// optional
-	ForwardFromMessageID int `json:"forward_from_message_id"`
+	ForwardFromMessageID int `json:"forward_from_message_id" bson:"forward_from_message_id"`
 	// ForwardDate for forwarded messages, date the original message was sent in Unix time;
 	//
 	// optional
-	ForwardDate int `json:"forward_date"`
+	ForwardDate int `json:"forward_date" bson:"forward_date"`
 	// ReplyToMessage for replies, the original message.
 	// Note that the Message object in this field will not contain further ReplyToMessage fields
 	// even if it itself is a reply;
 	//
 	// optional
-	ReplyToMessage *Message `json:"reply_to_message"`
+	ReplyToMessage *Message `json:"reply_to_message" bson:"reply_to_message"`
 	// ViaBot through which the message was sent;
 	//
 	// optional
-	ViaBot *User `json:"via_bot"`
+	ViaBot *User `json:"via_bot" bson:"via_bot"`
 	// EditDate of the message was last edited in Unix time;
 	//
 	// optional
-	EditDate int `json:"edit_date"`
+	EditDate int `json:"edit_date" bson:"edit_date"`
 	// MediaGroupID is the unique identifier of a media message group this message belongs to;
 	//
 	// optional
-	MediaGroupID string `json:"media_group_id"`
+	MediaGroupID string `json:"media_group_id" bson:"media_group_id"`
 	// AuthorSignature is the signature of the post author for messages in channels;
 	//
 	// optional
-	AuthorSignature string `json:"author_signature"`
+	AuthorSignature string `json:"author_signature" bson:"author_signature"`
 	// Text is for text messages, the actual UTF-8 text of the message, 0-4096 characters;
 	//
 	// optional
-	Text string `json:"text"`
+	Text string `json:"text" bson:"text"`
 	// Entities is for text messages, special entities like usernames,
 	// URLs, bot commands, etc. that appear in the text;
 	//
 	// optional
-	Entities *[]MessageEntity `json:"entities"`
+	Entities *[]MessageEntity `json:"entities" bson:"entities"`
 	// CaptionEntities;
 	//
 	// optional
-	CaptionEntities *[]MessageEntity `json:"caption_entities"`
+	CaptionEntities *[]MessageEntity `json:"caption_entities" bson:"caption_entities"`
 	// Audio message is an audio file, information about the file;
 	//
 	// optional
-	Audio *Audio `json:"audio"`
+	Audio *Audio `json:"audio" bson:"audio"`
 	// Document message is a general file, information about the file;
 	//
 	// optional
-	Document *Document `json:"document"`
+	Document *Document `json:"document" bson:"document"`
 	// Animation message is an animation, information about the animation.
 	// For backward compatibility, when this field is set, the document field will also be set;
 	//
 	// optional
-	Animation *ChatAnimation `json:"animation"`
+	Animation *ChatAnimation `json:"animation" bson:"animation"`
 	// Game message is a game, information about the game;
 	//
 	// optional
-	Game *Game `json:"game"`
+	Game *Game `json:"game" bson:"game"`
 	// Photo message is a photo, available sizes of the photo;
 	//
 	// optional
-	Photo *[]PhotoSize `json:"photo"`
+	Photo *[]PhotoSize `json:"photo" bson:"photo"`
 	// Sticker message is a sticker, information about the sticker;
 	//
 	// optional
-	Sticker *Sticker `json:"sticker"`
+	Sticker *Sticker `json:"sticker" bson:"sticker"`
 	// Video message is a video, information about the video;
 	//
 	// optional
-	Video *Video `json:"video"`
+	Video *Video `json:"video" bson:"video"`
 	// VideoNote message is a video note, information about the video message;
 	//
 	// optional
-	VideoNote *VideoNote `json:"video_note"`
+	VideoNote *VideoNote `json:"video_note" bson:"video_note"`
 	// Voice message is a voice message, information about the file;
 	//
 	// optional
-	Voice *Voice `json:"voice"`
+	Voice *Voice `json:"voice" bson:"voice"`
 	// Caption for the animation, audio, document, photo, video or voice, 0-1024 characters;
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// Contact message is a shared contact, information about the contact;
 	//
 	// optional
-	Contact *Contact `json:"contact"`
+	Contact *Contact `json:"contact" bson:"contact"`
 	// Location message is a shared location, information about the location;
 	//
 	// optional
-	Location *Location `json:"location"`
+	Location *Location `json:"location" bson:"location"`
 	// Venue message is a venue, information about the venue.
 	// For backward compatibility, when this field is set, the location field will also be set;
 	//
 	// optional
-	Venue *Venue `json:"venue"`
+	Venue *Venue `json:"venue" bson:"venue"`
 	// NewChatMembers that were added to the group or supergroup
 	// and information about them (the bot itself may be one of these members);
 	//
 	// optional
-	NewChatMembers *[]User `json:"new_chat_members"`
+	NewChatMembers *[]User `json:"new_chat_members" bson:"new_chat_members"`
 	// LeftChatMember is a member was removed from the group,
 	// information about them (this member may be the bot itself);
 	//
 	// optional
-	LeftChatMember *User `json:"left_chat_member"`
+	LeftChatMember *User `json:"left_chat_member" bson:"left_chat_member"`
 	// NewChatTitle is a chat title was changed to this value;
 	//
 	// optional
-	NewChatTitle string `json:"new_chat_title"`
+	NewChatTitle string `json:"new_chat_title" bson:"new_chat_title"`
 	// NewChatPhoto is a chat photo was change to this value;
 	//
 	// optional
-	NewChatPhoto *[]PhotoSize `json:"new_chat_photo"`
+	NewChatPhoto *[]PhotoSize `json:"new_chat_photo" bson:"new_chat_photo"`
 	// DeleteChatPhoto is a service message: the chat photo was deleted;
 	//
 	// optional
-	DeleteChatPhoto bool `json:"delete_chat_photo"`
+	DeleteChatPhoto bool `json:"delete_chat_photo" bson:"delete_chat_photo"`
 	// GroupChatCreated is a service message: the group has been created;
 	//
 	// optional
-	GroupChatCreated bool `json:"group_chat_created"`
+	GroupChatCreated bool `json:"group_chat_created" bson:"group_chat_created"`
 	// SuperGroupChatCreated is a service message: the supergroup has been created.
 	// This field can't be received in a message coming through updates,
 	// because bot can't be a member of a supergroup when it is created.
@@ -371,7 +371,7 @@ type Message struct {
 	// in a directly created supergroup;
 	//
 	// optional
-	SuperGroupChatCreated bool `json:"supergroup_chat_created"`
+	SuperGroupChatCreated bool `json:"supergroup_chat_created" bson:"supergroup_chat_created"`
 	// ChannelChatCreated is a service message: the channel has been created.
 	// This field can't be received in a message coming through updates,
 	// because bot can't be a member of a channel when it is created.
@@ -379,7 +379,7 @@ type Message struct {
 	// if someone replies to a very first message in a channel;
 	//
 	// optional
-	ChannelChatCreated bool `json:"channel_chat_created"`
+	ChannelChatCreated bool `json:"channel_chat_created" bson:"channel_chat_created"`
 	// MigrateToChatID is the group has been migrated to a supergroup with the specified identifier.
 	// This number may be greater than 32 bits and some programming languages
 	// may have difficulty/silent defects in interpreting it.
@@ -387,7 +387,7 @@ type Message struct {
 	// or double-precision float type are safe for storing this identifier;
 	//
 	// optional
-	MigrateToChatID int64 `json:"migrate_to_chat_id"`
+	MigrateToChatID int64 `json:"migrate_to_chat_id" bson:"migrate_to_chat_id"`
 	// MigrateFromChatID is the supergroup has been migrated from a group with the specified identifier.
 	// This number may be greater than 32 bits and some programming languages
 	// may have difficulty/silent defects in interpreting it.
@@ -395,26 +395,26 @@ type Message struct {
 	// or double-precision float type are safe for storing this identifier;
 	//
 	// optional
-	MigrateFromChatID int64 `json:"migrate_from_chat_id"`
+	MigrateFromChatID int64 `json:"migrate_from_chat_id" bson:"migrate_from_chat_id"`
 	// PinnedMessage is a specified message was pinned.
 	// Note that the Message object in this field will not contain further ReplyToMessage
 	// fields even if it is itself a reply;
 	//
 	// optional
-	PinnedMessage *Message `json:"pinned_message"`
+	PinnedMessage *Message `json:"pinned_message" bson:"pinned_message"`
 	// Invoice message is an invoice for a payment;
 	//
 	// optional
-	Invoice *Invoice `json:"invoice"`
+	Invoice *Invoice `json:"invoice" bson:"invoice"`
 	// SuccessfulPayment message is a service message about a successful payment,
 	// information about the payment;
 	//
 	// optional
-	SuccessfulPayment *SuccessfulPayment `json:"successful_payment"`
+	SuccessfulPayment *SuccessfulPayment `json:"successful_payment" bson:"successful_payment"`
 	// PassportData is a Telegram Passport data;
 	//
 	// optional
-	PassportData *PassportData `json:"passport_data,omitempty"`
+	PassportData *PassportData `json:"passport_data,omitempty" bson:"passport_data,omitempty"`
 }
 
 // Time converts the message timestamp into a Time.
@@ -504,19 +504,19 @@ type MessageEntity struct {
 	//  “pre” (monowidth block),
 	//  “text_link” (for clickable text URLs),
 	//  “text_mention” (for users without usernames)
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// Offset in UTF-16 code units to the start of the entity
-	Offset int `json:"offset"`
+	Offset int `json:"offset" bson:"offset"`
 	// Length
-	Length int `json:"length"`
+	Length int `json:"length" bson:"length"`
 	// URL for “text_link” only, url that will be opened after user taps on the text
 	//
 	// optional
-	URL string `json:"url"`
+	URL string `json:"url" bson:"url"`
 	// User for “text_mention” only, the mentioned user
 	//
 	// optional
-	User *User `json:"user"`
+	User *User `json:"user" bson:"user"`
 }
 
 // ParseURL attempts to parse a URL contained within a MessageEntity.
@@ -581,61 +581,61 @@ func (e MessageEntity) IsTextLink() bool {
 // PhotoSize contains information about photos.
 type PhotoSize struct {
 	// FileID identifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Width photo width
-	Width int `json:"width"`
+	Width int `json:"width" bson:"width"`
 	// Height photo height
-	Height int `json:"height"`
+	Height int `json:"height" bson:"height"`
 	// FileSize file size
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 }
 
 // Audio contains information about audio.
 type Audio struct {
 	// FileID is an identifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Duration of the audio in seconds as defined by sender
-	Duration int `json:"duration"`
+	Duration int `json:"duration" bson:"duration"`
 	// Performer of the audio as defined by sender or by audio tags
 	//
 	// optional
-	Performer string `json:"performer"`
+	Performer string `json:"performer" bson:"performer"`
 	// Title of the audio as defined by sender or by audio tags
 	//
 	// optional
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// MimeType of the file as defined by sender
 	//
 	// optional
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	// FileSize file size
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 }
 
 // Document contains information about a document.
 type Document struct {
 	// FileID is a identifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Thumbnail document thumbnail as defined by sender
 	//
 	// optional
-	Thumbnail *PhotoSize `json:"thumb"`
+	Thumbnail *PhotoSize `json:"thumb" bson:"thumb"`
 	// FileName original filename as defined by sender
 	//
 	// optional
-	FileName string `json:"file_name"`
+	FileName string `json:"file_name" bson:"file_name"`
 	// MimeType  of the file as defined by sender
 	//
 	// optional
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	// FileSize file size
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 }
 
 // Sticker contains information about a sticker.
@@ -643,133 +643,133 @@ type Sticker struct {
 	// FileUniqueID is an unique identifier for this file,
 	// which is supposed to be the same over time and for different bots.
 	// Can't be used to download or reuse the file.
-	FileUniqueID string `json:"file_unique_id"`
+	FileUniqueID string `json:"file_unique_id" bson:"file_unique_id"`
 	// FileID is an identifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Width sticker width
-	Width int `json:"width"`
+	Width int `json:"width" bson:"width"`
 	// Height sticker height
-	Height int `json:"height"`
+	Height int `json:"height" bson:"height"`
 	// Thumbnail sticker thumbnail in the .WEBP or .JPG format
 	//
 	// optional
-	Thumbnail *PhotoSize `json:"thumb"`
+	Thumbnail *PhotoSize `json:"thumb" bson:"thumb"`
 	// Emoji associated with the sticker
 	//
 	// optional
-	Emoji string `json:"emoji"`
+	Emoji string `json:"emoji" bson:"emoji"`
 	// FileSize
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 	// SetName of the sticker set to which the sticker belongs
 	//
 	// optional
-	SetName string `json:"set_name"`
+	SetName string `json:"set_name" bson:"set_name"`
 	// IsAnimated true, if the sticker is animated
 	//
 	// optional
-	IsAnimated bool `json:"is_animated"`
+	IsAnimated bool `json:"is_animated" bson:"is_animated"`
 }
 
 // StickerSet contains information about an sticker set.
 type StickerSet struct {
 	// Name sticker set name
-	Name string `json:"name"`
+	Name string `json:"name" bson:"name"`
 	// Title sticker set title
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// IsAnimated true, if the sticker set contains animated stickers
-	IsAnimated bool `json:"is_animated"`
+	IsAnimated bool `json:"is_animated" bson:"is_animated"`
 	// ContainsMasks true, if the sticker set contains masks
-	ContainsMasks bool `json:"contains_masks"`
+	ContainsMasks bool `json:"contains_masks" bson:"contains_masks"`
 	// Stickers list of all set stickers
-	Stickers []Sticker `json:"stickers"`
+	Stickers []Sticker `json:"stickers" bson:"stickers"`
 }
 
 // ChatAnimation contains information about an animation.
 type ChatAnimation struct {
 	// FileID odentifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Width video width as defined by sender
-	Width int `json:"width"`
+	Width int `json:"width" bson:"width"`
 	// Height video height as defined by sender
-	Height int `json:"height"`
+	Height int `json:"height" bson:"height"`
 	// Duration of the video in seconds as defined by sender
-	Duration int `json:"duration"`
+	Duration int `json:"duration" bson:"duration"`
 	// Thumbnail animation thumbnail as defined by sender
 	//
 	// optional
-	Thumbnail *PhotoSize `json:"thumb"`
+	Thumbnail *PhotoSize `json:"thumb" bson:"thumb"`
 	// FileName original animation filename as defined by sender
 	//
 	// optional
-	FileName string `json:"file_name"`
+	FileName string `json:"file_name" bson:"file_name"`
 	// MimeType of the file as defined by sender
 	//
 	// optional
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	// FileSize file size
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 }
 
 // Video contains information about a video.
 type Video struct {
 	// FileID identifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Width video width as defined by sender
-	Width int `json:"width"`
+	Width int `json:"width" bson:"width"`
 	// Height video height as defined by sender
-	Height int `json:"height"`
+	Height int `json:"height" bson:"height"`
 	// Duration of the video in seconds as defined by sender
-	Duration int `json:"duration"`
+	Duration int `json:"duration" bson:"duration"`
 	// Thumbnail video thumbnail
 	//
 	// optional
-	Thumbnail *PhotoSize `json:"thumb"`
+	Thumbnail *PhotoSize `json:"thumb" bson:"thumb"`
 	// MimeType of a file as defined by sender
 	//
 	// optional
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	// FileSize file size
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 }
 
 // VideoNote contains information about a video.
 type VideoNote struct {
 	// FileID identifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Length video width and height (diameter of the video message) as defined by sender
-	Length int `json:"length"`
+	Length int `json:"length" bson:"length"`
 	// Duration of the video in seconds as defined by sender
-	Duration int `json:"duration"`
+	Duration int `json:"duration" bson:"duration"`
 	// Thumbnail video thumbnail
 	//
 	// optional
-	Thumbnail *PhotoSize `json:"thumb"`
+	Thumbnail *PhotoSize `json:"thumb" bson:"thumb"`
 	// FileSize file size
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 }
 
 // Voice contains information about a voice.
 type Voice struct {
 	// FileID identifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Duration of the audio in seconds as defined by sender
-	Duration int `json:"duration"`
+	Duration int `json:"duration" bson:"duration"`
 	// MimeType of the file as defined by sender
 	//
 	// optional
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	// FileSize file size
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 }
 
 // Contact contains information about a contact.
@@ -777,61 +777,61 @@ type Voice struct {
 // Note that LastName and UserID may be empty.
 type Contact struct {
 	// PhoneNumber contact's phone number
-	PhoneNumber string `json:"phone_number"`
+	PhoneNumber string `json:"phone_number" bson:"phone_number"`
 	// FirstName contact's first name
-	FirstName string `json:"first_name"`
+	FirstName string `json:"first_name" bson:"first_name"`
 	// LastName contact's last name
 	//
 	// optional
-	LastName string `json:"last_name"`
+	LastName string `json:"last_name" bson:"last_name"`
 	// UserID contact's user identifier in Telegram
 	//
 	// optional
-	UserID int `json:"user_id"`
+	UserID int `json:"user_id" bson:"user_id"`
 }
 
 // Location contains information about a place.
 type Location struct {
 	// Longitude as defined by sender
-	Longitude float64 `json:"longitude"`
+	Longitude float64 `json:"longitude" bson:"longitude"`
 	// Latitude as defined by sender
-	Latitude float64 `json:"latitude"`
+	Latitude float64 `json:"latitude" bson:"latitude"`
 }
 
 // Venue contains information about a venue, including its Location.
 type Venue struct {
 	// Location venue location
-	Location Location `json:"location"`
+	Location Location `json:"location" bson:"location"`
 	// Title name of the venue
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Address of the venue
-	Address string `json:"address"`
+	Address string `json:"address" bson:"address"`
 	// FoursquareID foursquare identifier of the venue
 	//
 	// optional
-	FoursquareID string `json:"foursquare_id"`
+	FoursquareID string `json:"foursquare_id" bson:"foursquare_id"`
 }
 
 // UserProfilePhotos contains a set of user profile photos.
 type UserProfilePhotos struct {
 	// TotalCount total number of profile pictures the target user has
-	TotalCount int `json:"total_count"`
+	TotalCount int `json:"total_count" bson:"total_count"`
 	// Photos requested profile pictures (in up to 4 sizes each)
-	Photos [][]PhotoSize `json:"photos"`
+	Photos [][]PhotoSize `json:"photos" bson:"photos"`
 }
 
 // File contains information about a file to download from Telegram.
 type File struct {
 	// FileID identifier for this file, which can be used to download or reuse the file
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// FileSize file size, if known
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 	// FilePath file path
 	//
 	// optional
-	FilePath string `json:"file_path"`
+	FilePath string `json:"file_path" bson:"file_path"`
 }
 
 // Link returns a full path to the download URL for a File.
@@ -844,14 +844,14 @@ func (f *File) Link(token string) string {
 // ReplyKeyboardMarkup allows the Bot to set a custom keyboard.
 type ReplyKeyboardMarkup struct {
 	// Keyboard is an array of button rows, each represented by an Array of KeyboardButton objects
-	Keyboard [][]KeyboardButton `json:"keyboard"`
+	Keyboard [][]KeyboardButton `json:"keyboard" bson:"keyboard"`
 	// ResizeKeyboard requests clients to resize the keyboard vertically for optimal fit
 	// (e.g., make the keyboard smaller if there are just two rows of buttons).
 	// Defaults to false, in which case the custom keyboard
 	// is always of the same height as the app's standard keyboard.
 	//
 	// optional
-	ResizeKeyboard bool `json:"resize_keyboard"`
+	ResizeKeyboard bool `json:"resize_keyboard" bson:"resize_keyboard"`
 	// OneTimeKeyboard requests clients to hide the keyboard as soon as it's been used.
 	// The keyboard will still be available, but clients will automatically display
 	// the usual letter-keyboard in the chat – the user can press a special button
@@ -859,7 +859,7 @@ type ReplyKeyboardMarkup struct {
 	// Defaults to false.
 	//
 	// optional
-	OneTimeKeyboard bool `json:"one_time_keyboard"`
+	OneTimeKeyboard bool `json:"one_time_keyboard" bson:"one_time_keyboard"`
 	// Selective use this parameter if you want to show the keyboard to specific users only.
 	// Targets:
 	//  1) users that are @mentioned in the text of the Message object;
@@ -870,31 +870,31 @@ type ReplyKeyboardMarkup struct {
 	// Other users in the group don't see the keyboard.
 	//
 	// optional
-	Selective bool `json:"selective"`
+	Selective bool `json:"selective" bson:"selective"`
 }
 
 // KeyboardButton is a button within a custom keyboard.
 type KeyboardButton struct {
 	// Text of the button. If none of the optional fields are used,
 	// it will be sent as a message when the button is pressed.
-	Text string `json:"text"`
+	Text string `json:"text" bson:"text"`
 	// RequestContact if True, the user's phone number will be sent
 	// as a contact when the button is pressed.
 	// Available in private chats only.
 	//
 	// optional
-	RequestContact bool `json:"request_contact"`
+	RequestContact bool `json:"request_contact" bson:"request_contact"`
 	// RequestLocation if True, the user's current location will be sent when the button is pressed.
 	// Available in private chats only.
 	//
 	// optional
-	RequestLocation bool `json:"request_location"`
+	RequestLocation bool `json:"request_location" bson:"request_location"`
 }
 
 // ReplyKeyboardHide allows the Bot to hide a custom keyboard.
 type ReplyKeyboardHide struct {
-	HideKeyboard bool `json:"hide_keyboard"`
-	Selective    bool `json:"selective"` // optional
+	HideKeyboard bool `json:"hide_keyboard" bson:"hide_keyboard"`
+	Selective    bool `json:"selective" bson:"selective"` // optional
 }
 
 // ReplyKeyboardRemove allows the Bot to hide a custom keyboard.
@@ -903,7 +903,7 @@ type ReplyKeyboardRemove struct {
 	// (user will not be able to summon this keyboard;
 	// if you want to hide the keyboard from sight but keep it accessible,
 	// use one_time_keyboard in ReplyKeyboardMarkup).
-	RemoveKeyboard bool `json:"remove_keyboard"`
+	RemoveKeyboard bool `json:"remove_keyboard" bson:"remove_keyboard"`
 	// Selective use this parameter if you want to remove the keyboard for specific users only.
 	// Targets:
 	//  1) users that are @mentioned in the text of the Message object;
@@ -914,13 +914,13 @@ type ReplyKeyboardRemove struct {
 	// while still showing the keyboard with poll options to users who haven't voted yet.
 	//
 	// optional
-	Selective bool `json:"selective"`
+	Selective bool `json:"selective" bson:"selective"`
 }
 
 // InlineKeyboardMarkup is a custom keyboard presented for an inline bot.
 type InlineKeyboardMarkup struct {
 	// InlineKeyboard array of button rows, each represented by an Array of InlineKeyboardButton objects
-	InlineKeyboard [][]InlineKeyboardButton `json:"inline_keyboard"`
+	InlineKeyboard [][]InlineKeyboardButton `json:"inline_keyboard" bson:"inline_keyboard"`
 }
 
 // InlineKeyboardButton is a button within a custom keyboard for
@@ -932,15 +932,15 @@ type InlineKeyboardMarkup struct {
 // CallbackGame, if set, MUST be first button in first row.
 type InlineKeyboardButton struct {
 	// Text label text on the button
-	Text string `json:"text"`
+	Text string `json:"text" bson:"text"`
 	// URL HTTP or tg:// url to be opened when button is pressed.
 	//
 	// optional
-	URL *string `json:"url,omitempty"`
+	URL *string `json:"url,omitempty" bson:"url,omitempty"`
 	// CallbackData data to be sent in a callback query to the bot when button is pressed, 1-64 bytes.
 	//
 	// optional
-	CallbackData *string `json:"callback_data,omitempty"`
+	CallbackData *string `json:"callback_data,omitempty" bson:"callback_data,omitempty"`
 	// SwitchInlineQuery if set, pressing the button will prompt the user to select one of their chats,
 	// open that chat and insert the bot's username and the specified inline query in the input field.
 	// Can be empty, in which case just the bot's username will be inserted.
@@ -952,7 +952,7 @@ type InlineKeyboardButton struct {
 	// skipping the chat selection screen.
 	//
 	// optional
-	SwitchInlineQuery *string `json:"switch_inline_query,omitempty"`
+	SwitchInlineQuery *string `json:"switch_inline_query,omitempty" bson:"switch_inline_query,omitempty"`
 	// SwitchInlineQueryCurrentChat if set, pressing the button will insert the bot's username
 	// and the specified inline query in the current chat's input field.
 	// Can be empty, in which case only the bot's username will be inserted.
@@ -961,49 +961,49 @@ type InlineKeyboardButton struct {
 	// in the same chat – good for selecting something from multiple options.
 	//
 	// optional
-	SwitchInlineQueryCurrentChat *string `json:"switch_inline_query_current_chat,omitempty"`
+	SwitchInlineQueryCurrentChat *string `json:"switch_inline_query_current_chat,omitempty" bson:"switch_inline_query_current_chat,omitempty"`
 	// CallbackGame description of the game that will be launched when the user presses the button.
 	//
 	// optional
-	CallbackGame *CallbackGame `json:"callback_game,omitempty"`
+	CallbackGame *CallbackGame `json:"callback_game,omitempty" bson:"callback_game,omitempty"`
 	// Pay specify True, to send a Pay button.
 	//
 	// NOTE: This type of button must always be the first button in the first row.
 	//
 	// optional
-	Pay bool `json:"pay,omitempty"`
+	Pay bool `json:"pay,omitempty" bson:"pay,omitempty"`
 }
 
 // CallbackQuery is data sent when a keyboard button with callback data
 // is clicked.
 type CallbackQuery struct {
 	// ID unique identifier for this query
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// From sender
-	From *User `json:"from"`
+	From *User `json:"from" bson:"from"`
 	// Message with the callback button that originated the query.
 	// Note that message content and message date will not be available if the message is too old.
 	//
 	// optional
-	Message *Message `json:"message"`
+	Message *Message `json:"message" bson:"message"`
 	// InlineMessageID identifier of the message sent via the bot in inline mode, that originated the query.
 	//
 	// optional
 	//
-	InlineMessageID string `json:"inline_message_id"`
+	InlineMessageID string `json:"inline_message_id" bson:"inline_message_id"`
 	// ChatInstance global identifier, uniquely corresponding to the chat to which
 	// the message with the callback button was sent. Useful for high scores in games.
 	//
-	ChatInstance string `json:"chat_instance"`
+	ChatInstance string `json:"chat_instance" bson:"chat_instance"`
 	// Data associated with the callback button. Be aware that
 	// a bad client can send arbitrary data in this field.
 	//
 	// optional
-	Data string `json:"data"`
+	Data string `json:"data" bson:"data"`
 	// GameShortName short name of a Game to be returned, serves as the unique identifier for the game.
 	//
 	// optional
-	GameShortName string `json:"game_short_name"`
+	GameShortName string `json:"game_short_name" bson:"game_short_name"`
 }
 
 // ForceReply allows the Bot to have users directly reply to it without
@@ -1011,20 +1011,20 @@ type CallbackQuery struct {
 type ForceReply struct {
 	// ForceReply shows reply interface to the user,
 	// as if they manually selected the bot's message and tapped 'Reply'.
-	ForceReply bool `json:"force_reply"`
+	ForceReply bool `json:"force_reply" bson:"force_reply"`
 	// Selective use this parameter if you want to force reply from specific users only.
 	// Targets:
 	//  1) users that are @mentioned in the text of the Message object;
 	//  2) if the bot's message is a reply (has Message.ReplyToMessage not nil), sender of the original message.
 	//
 	// optional
-	Selective bool `json:"selective"`
+	Selective bool `json:"selective" bson:"selective"`
 }
 
 // ChatMember is information about a member in a chat.
 type ChatMember struct {
 	// User information about the user
-	User *User `json:"user"`
+	User *User `json:"user" bson:"user"`
 	// Status the member's status in the chat.
 	// Can be
 	//  “creator”,
@@ -1033,85 +1033,85 @@ type ChatMember struct {
 	//  “restricted”,
 	//  “left” or
 	//  “kicked”
-	Status string `json:"status"`
+	Status string `json:"status" bson:"status"`
 	// CustomTitle owner and administrators only. Custom title for this user
 	//
 	// optional
-	CustomTitle string `json:"custom_title,omitempty"`
+	CustomTitle string `json:"custom_title,omitempty" bson:"custom_title,omitempty"`
 	// UntilDate restricted and kicked only.
 	// Date when restrictions will be lifted for this user;
 	// unix time.
 	//
 	// optional
-	UntilDate int64 `json:"until_date,omitempty"`
+	UntilDate int64 `json:"until_date,omitempty" bson:"until_date,omitempty"`
 	// CanBeEdited administrators only.
 	// True, if the bot is allowed to edit administrator privileges of that user.
 	//
 	// optional
-	CanBeEdited bool `json:"can_be_edited,omitempty"`
+	CanBeEdited bool `json:"can_be_edited,omitempty" bson:"can_be_edited,omitempty"`
 	// CanChangeInfo administrators and restricted only.
 	// True, if the user is allowed to change the chat title, photo and other settings.
 	//
 	// optional
-	CanChangeInfo bool `json:"can_change_info,omitempty"`
+	CanChangeInfo bool `json:"can_change_info,omitempty" bson:"can_change_info,omitempty"`
 	// CanChangeInfo administrators only.
 	// True, if the administrator can post in the channel;
 	// channels only.
 	//
 	// optional
-	CanPostMessages bool `json:"can_post_messages,omitempty"`
+	CanPostMessages bool `json:"can_post_messages,omitempty" bson:"can_post_messages,omitempty"`
 	// CanEditMessages administrators only.
 	// True, if the administrator can edit messages of other users and can pin messages;
 	// channels only.
 	//
 	// optional
-	CanEditMessages bool `json:"can_edit_messages,omitempty"`
+	CanEditMessages bool `json:"can_edit_messages,omitempty" bson:"can_edit_messages,omitempty"`
 	// CanDeleteMessages administrators only.
 	// True, if the administrator can delete messages of other users.
 	//
 	// optional
-	CanDeleteMessages bool `json:"can_delete_messages,omitempty"`
+	CanDeleteMessages bool `json:"can_delete_messages,omitempty" bson:"can_delete_messages,omitempty"`
 	// CanInviteUsers administrators and restricted only.
 	// True, if the user is allowed to invite new users to the chat.
 	//
 	// optional
-	CanInviteUsers bool `json:"can_invite_users,omitempty"`
+	CanInviteUsers bool `json:"can_invite_users,omitempty" bson:"can_invite_users,omitempty"`
 	// CanRestrictMembers administrators only.
 	// True, if the administrator can restrict, ban or unban chat members.
 	//
 	// optional
-	CanRestrictMembers bool `json:"can_restrict_members,omitempty"`
+	CanRestrictMembers bool `json:"can_restrict_members,omitempty" bson:"can_restrict_members,omitempty"`
 	// CanPinMessages
 	//
 	// optional
-	CanPinMessages bool `json:"can_pin_messages,omitempty"`
+	CanPinMessages bool `json:"can_pin_messages,omitempty" bson:"can_pin_messages,omitempty"`
 	// CanPromoteMembers administrators only.
 	// True, if the administrator can add new administrators
 	// with a subset of their own privileges or demote administrators that he has promoted,
 	// directly or indirectly (promoted by administrators that were appointed by the user).
 	//
 	// optional
-	CanPromoteMembers bool `json:"can_promote_members,omitempty"`
+	CanPromoteMembers bool `json:"can_promote_members,omitempty" bson:"can_promote_members,omitempty"`
 	// CanSendMessages
 	//
 	// optional
-	CanSendMessages bool `json:"can_send_messages,omitempty"`
+	CanSendMessages bool `json:"can_send_messages,omitempty" bson:"can_send_messages,omitempty"`
 	// CanSendMediaMessages restricted only.
 	// True, if the user is allowed to send text messages, contacts, locations and venues
 	//
 	// optional
-	CanSendMediaMessages bool `json:"can_send_media_messages,omitempty"`
+	CanSendMediaMessages bool `json:"can_send_media_messages,omitempty" bson:"can_send_media_messages,omitempty"`
 	// CanSendOtherMessages restricted only.
 	// True, if the user is allowed to send audios, documents,
 	// photos, videos, video notes and voice notes.
 	//
 	// optional
-	CanSendOtherMessages bool `json:"can_send_other_messages,omitempty"`
+	CanSendOtherMessages bool `json:"can_send_other_messages,omitempty" bson:"can_send_other_messages,omitempty"`
 	// CanAddWebPagePreviews restricted only.
 	// True, if the user is allowed to add web page previews to their messages.
 	//
 	// optional
-	CanAddWebPagePreviews bool `json:"can_add_web_page_previews,omitempty"`
+	CanAddWebPagePreviews bool `json:"can_add_web_page_previews,omitempty" bson:"can_add_web_page_previews,omitempty"`
 }
 
 // IsCreator returns if the ChatMember was the creator of the chat.
@@ -1132,58 +1132,58 @@ func (chat ChatMember) WasKicked() bool { return chat.Status == "kicked" }
 // Game is a game within Telegram.
 type Game struct {
 	// Title of the game
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Description of the game
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// Photo that will be displayed in the game message in chats.
-	Photo []PhotoSize `json:"photo"`
+	Photo []PhotoSize `json:"photo" bson:"photo"`
 	// Text a brief description of the game or high scores included in the game message.
 	// Can be automatically edited to include current high scores for the game
 	// when the bot calls setGameScore, or manually edited using editMessageText. 0-4096 characters.
 	//
 	// optional
-	Text string `json:"text"`
+	Text string `json:"text" bson:"text"`
 	// TextEntities special entities that appear in text, such as usernames, URLs, bot commands, etc.
 	//
 	// optional
-	TextEntities []MessageEntity `json:"text_entities"`
+	TextEntities []MessageEntity `json:"text_entities" bson:"text_entities"`
 	// Animation animation that will be displayed in the game message in chats.
 	// Upload via BotFather (https://t.me/botfather).
 	//
 	// optional
-	Animation Animation `json:"animation"`
+	Animation Animation `json:"animation" bson:"animation"`
 }
 
 // Animation is a GIF animation demonstrating the game.
 type Animation struct {
 	// FileID identifier for this file, which can be used to download or reuse the file.
-	FileID string `json:"file_id"`
+	FileID string `json:"file_id" bson:"file_id"`
 	// Thumb animation thumbnail as defined by sender.
 	//
 	// optional
-	Thumb PhotoSize `json:"thumb"`
+	Thumb PhotoSize `json:"thumb" bson:"thumb"`
 	// FileName original animation filename as defined by sender.
 	//
 	// optional
-	FileName string `json:"file_name"`
+	FileName string `json:"file_name" bson:"file_name"`
 	// MimeType of the file as defined by sender.
 	//
 	// optional
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	// FileSize ile size
 	//
 	// optional
-	FileSize int `json:"file_size"`
+	FileSize int `json:"file_size" bson:"file_size"`
 }
 
 // GameHighScore is a user's score and position on the leaderboard.
 type GameHighScore struct {
 	// Position in high score table for the game
-	Position int `json:"position"`
+	Position int `json:"position" bson:"position"`
 	// User user
-	User User `json:"user"`
+	User User `json:"user" bson:"user"`
 	// Score score
-	Score int `json:"score"`
+	Score int `json:"score" bson:"score"`
 }
 
 // CallbackGame is for starting a game in an inline keyboard button.
@@ -1192,26 +1192,26 @@ type CallbackGame struct{}
 // WebhookInfo is information about a currently set webhook.
 type WebhookInfo struct {
 	// URL webhook URL, may be empty if webhook is not set up.
-	URL string `json:"url"`
+	URL string `json:"url" bson:"url"`
 	// HasCustomCertificate true, if a custom certificate was provided for webhook certificate checks.
-	HasCustomCertificate bool `json:"has_custom_certificate"`
+	HasCustomCertificate bool `json:"has_custom_certificate" bson:"has_custom_certificate"`
 	// PendingUpdateCount number of updates awaiting delivery.
-	PendingUpdateCount int `json:"pending_update_count"`
+	PendingUpdateCount int `json:"pending_update_count" bson:"pending_update_count"`
 	// LastErrorDate unix time for the most recent error
 	// that happened when trying to deliver an update via webhook.
 	//
 	// optional
-	LastErrorDate int `json:"last_error_date"`
+	LastErrorDate int `json:"last_error_date" bson:"last_error_date"`
 	// LastErrorMessage error message in human-readable format for the most recent error
 	// that happened when trying to deliver an update via webhook.
 	//
 	// optional
-	LastErrorMessage string `json:"last_error_message"`
+	LastErrorMessage string `json:"last_error_message" bson:"last_error_message"`
 	// MaxConnections maximum allowed number of simultaneous
 	// HTTPS connections to the webhook for update delivery.
 	//
 	// optional
-	MaxConnections int `json:"max_connections"`
+	MaxConnections int `json:"max_connections" bson:"max_connections"`
 }
 
 // IsSet returns true if a webhook is currently set.
@@ -1222,79 +1222,79 @@ func (info WebhookInfo) IsSet() bool {
 // InputMediaPhoto contains a photo for displaying as part of a media group.
 type InputMediaPhoto struct {
 	// Type of the result, must be photo.
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// Media file to send. Pass a file_id to send a file that
 	// exists on the Telegram servers (recommended),
 	// pass an HTTP URL for Telegram to get a file from the Internet,
 	// or pass “attach://<file_attach_name>” to upload a new one
 	// using multipart/form-data under <file_attach_name> name.
-	Media string `json:"media"`
+	Media string `json:"media" bson:"media"`
 	// Caption of the photo to be sent, 0-1024 characters after entities parsing.
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the photo caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 }
 
 // InputMediaVideo contains a video for displaying as part of a media group.
 type InputMediaVideo struct {
 	// Type of the result, must be video.
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// Media file to send. Pass a file_id to send a file
 	// that exists on the Telegram servers (recommended),
 	// pass an HTTP URL for Telegram to get a file from the Internet,
 	// or pass “attach://<file_attach_name>” to upload a new one
 	// using multipart/form-data under <file_attach_name> name.
-	Media string `json:"media"`
+	Media string `json:"media" bson:"media"`
 	// thumb intentionally missing as it is not currently compatible
 
 	// Caption of the video to be sent, 0-1024 characters after entities parsing.
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the video caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// Width video width
 	//
 	// optional
-	Width int `json:"width"`
+	Width int `json:"width" bson:"width"`
 	// Height video height
 	//
 	// optional
-	Height int `json:"height"`
+	Height int `json:"height" bson:"height"`
 	// Duration video duration
 	//
 	// optional
-	Duration int `json:"duration"`
+	Duration int `json:"duration" bson:"duration"`
 	// SupportsStreaming pass True, if the uploaded video is suitable for streaming.
 	//
 	// optional
-	SupportsStreaming bool `json:"supports_streaming"`
+	SupportsStreaming bool `json:"supports_streaming" bson:"supports_streaming"`
 }
 
 // InlineQuery is a Query from Telegram for an inline request.
 type InlineQuery struct {
 	// ID unique identifier for this query
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// From sender
-	From *User `json:"from"`
+	From *User `json:"from" bson:"from"`
 	// Location sender location, only for bots that request user location.
 	//
 	// optional
-	Location *Location `json:"location"`
+	Location *Location `json:"location" bson:"location"`
 	// Query text of the query (up to 256 characters).
-	Query string `json:"query"`
+	Query string `json:"query" bson:"query"`
 	// Offset of the results to be returned, can be controlled by the bot.
-	Offset string `json:"offset"`
+	Offset string `json:"offset" bson:"offset"`
 }
 
 // InlineQueryResultArticle is an inline query response article.
@@ -1302,47 +1302,47 @@ type InlineQueryResultArticle struct {
 	// Type of the result, must be article.
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 Bytes.
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// Title of the result
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// InputMessageContent content of the message to be sent.
 	//
 	// required
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 	// ReplyMarkup Inline keyboard attached to the message.
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// URL of the result.
 	//
 	// optional
-	URL string `json:"url"`
+	URL string `json:"url" bson:"url"`
 	// HideURL pass True, if you don't want the URL to be shown in the message.
 	//
 	// optional
-	HideURL bool `json:"hide_url"`
+	HideURL bool `json:"hide_url" bson:"hide_url"`
 	// Description short description of the result.
 	//
 	// optional
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// ThumbURL url of the thumbnail for the result
 	//
 	// optional
-	ThumbURL string `json:"thumb_url"`
+	ThumbURL string `json:"thumb_url" bson:"thumb_url"`
 	// ThumbWidth thumbnail width
 	//
 	// optional
-	ThumbWidth int `json:"thumb_width"`
+	ThumbWidth int `json:"thumb_width" bson:"thumb_width"`
 	// ThumbHeight thumbnail height
 	//
 	// optional
-	ThumbHeight int `json:"thumb_height"`
+	ThumbHeight int `json:"thumb_height" bson:"thumb_height"`
 }
 
 // InlineQueryResultPhoto is an inline query response photo.
@@ -1350,54 +1350,54 @@ type InlineQueryResultPhoto struct {
 	// Type of the result, must be article.
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 Bytes.
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// URL a valid URL of the photo. Photo must be in jpeg format.
 	// Photo size must not exceed 5MB.
-	URL string `json:"photo_url"`
+	URL string `json:"photo_url" bson:"photo_url"`
 	// MimeType
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	// Width of the photo
 	//
 	// optional
-	Width int `json:"photo_width"`
+	Width int `json:"photo_width" bson:"photo_width"`
 	// Height of the photo
 	//
 	// optional
-	Height int `json:"photo_height"`
+	Height int `json:"photo_height" bson:"photo_height"`
 	// ThumbURL url of the thumbnail for the photo.
 	//
 	// optional
-	ThumbURL string `json:"thumb_url"`
+	ThumbURL string `json:"thumb_url" bson:"thumb_url"`
 	// Title for the result
 	//
 	// optional
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Description short description of the result
 	//
 	// optional
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// Caption of the photo to be sent, 0-1024 characters after entities parsing.
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the photo caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message.
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the photo.
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultCachedPhoto is an inline query response with cached photo.
@@ -1405,41 +1405,41 @@ type InlineQueryResultCachedPhoto struct {
 	// Type of the result, must be photo.
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes.
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// PhotoID a valid file identifier of the photo.
 	//
 	// required
-	PhotoID string `json:"photo_file_id"`
+	PhotoID string `json:"photo_file_id" bson:"photo_file_id"`
 	// Title for the result.
 	//
 	// optional
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Description short description of the result.
 	//
 	// optional
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// Caption of the photo to be sent, 0-1024 characters after entities parsing.
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the photo caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message.
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the photo.
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultGIF is an inline query response GIF.
@@ -1447,47 +1447,47 @@ type InlineQueryResultGIF struct {
 	// Type of the result, must be gif.
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes.
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// URL a valid URL for the GIF file. File size must not exceed 1MB.
 	//
 	// required
-	URL string `json:"gif_url"`
+	URL string `json:"gif_url" bson:"gif_url"`
 	// ThumbURL url of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result.
 	//
 	// required
-	ThumbURL string `json:"thumb_url"`
+	ThumbURL string `json:"thumb_url" bson:"thumb_url"`
 	// Width of the GIF
 	//
 	// optional
-	Width int `json:"gif_width,omitempty"`
+	Width int `json:"gif_width,omitempty" bson:"gif_width,omitempty"`
 	// Height of the GIF
 	//
 	// optional
-	Height int `json:"gif_height,omitempty"`
+	Height int `json:"gif_height,omitempty" bson:"gif_height,omitempty"`
 	// Duration of the GIF
 	//
 	// optional
-	Duration int `json:"gif_duration,omitempty"`
+	Duration int `json:"gif_duration,omitempty" bson:"gif_duration,omitempty"`
 	// Title for the result
 	//
 	// optional
-	Title string `json:"title,omitempty"`
+	Title string `json:"title,omitempty" bson:"title,omitempty"`
 	// Caption of the GIF file to be sent, 0-1024 characters after entities parsing.
 	//
 	// optional
-	Caption string `json:"caption,omitempty"`
+	Caption string `json:"caption,omitempty" bson:"caption,omitempty"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the GIF animation.
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultCachedGIF is an inline query response with cached gif.
@@ -1495,37 +1495,37 @@ type InlineQueryResultCachedGIF struct {
 	// Type of the result, must be gif.
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes.
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// GifID a valid file identifier for the GIF file.
 	//
 	// required
-	GifID string `json:"gif_file_id"`
+	GifID string `json:"gif_file_id" bson:"gif_file_id"`
 	// Title for the result
 	//
 	// optional
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Caption of the GIF file to be sent, 0-1024 characters after entities parsing.
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message.
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the GIF animation.
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultMPEG4GIF is an inline query response MPEG4 GIF.
@@ -1533,45 +1533,45 @@ type InlineQueryResultMPEG4GIF struct {
 	// Type of the result, must be mpeg4_gif
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// URL a valid URL for the MP4 file. File size must not exceed 1MB
 	//
 	// required
-	URL string `json:"mpeg4_url"`
+	URL string `json:"mpeg4_url" bson:"mpeg4_url"`
 	// Width video width
 	//
 	// optional
-	Width int `json:"mpeg4_width"`
+	Width int `json:"mpeg4_width" bson:"mpeg4_width"`
 	// Height vVideo height
 	//
 	// optional
-	Height int `json:"mpeg4_height"`
+	Height int `json:"mpeg4_height" bson:"mpeg4_height"`
 	// Duration video duration
 	//
 	// optional
-	Duration int `json:"mpeg4_duration"`
+	Duration int `json:"mpeg4_duration" bson:"mpeg4_duration"`
 	// ThumbURL url of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result.
-	ThumbURL string `json:"thumb_url"`
+	ThumbURL string `json:"thumb_url" bson:"thumb_url"`
 	// Title for the result
 	//
 	// optional
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Caption of the MPEG-4 file to be sent, 0-1024 characters after entities parsing.
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the video animation
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultCachedMpeg4Gif is an inline query response with cached
@@ -1580,37 +1580,37 @@ type InlineQueryResultCachedMpeg4Gif struct {
 	// Type of the result, must be mpeg4_gif
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// MGifID a valid file identifier for the MP4 file
 	//
 	// required
-	MGifID string `json:"mpeg4_file_id"`
+	MGifID string `json:"mpeg4_file_id" bson:"mpeg4_file_id"`
 	// Title for the result
 	//
 	// optional
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Caption of the MPEG-4 file to be sent, 0-1024 characters after entities parsing.
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message.
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the video animation.
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultVideo is an inline query response video.
@@ -1618,57 +1618,57 @@ type InlineQueryResultVideo struct {
 	// Type of the result, must be video
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// URL a valid url for the embedded video player or video file
 	//
 	// required
-	URL string `json:"video_url"`
+	URL string `json:"video_url" bson:"video_url"`
 	// MimeType of the content of video url, “text/html” or “video/mp4”
 	//
 	// required
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	//
 	// ThumbURL url of the thumbnail (jpeg only) for the video
 	// optional
-	ThumbURL string `json:"thumb_url"`
+	ThumbURL string `json:"thumb_url" bson:"thumb_url"`
 	// Title for the result
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Caption of the video to be sent, 0-1024 characters after entities parsing
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// Width video width
 	//
 	// optional
-	Width int `json:"video_width"`
+	Width int `json:"video_width" bson:"video_width"`
 	// Height video height
 	//
 	// optional
-	Height int `json:"video_height"`
+	Height int `json:"video_height" bson:"video_height"`
 	// Duration video duration in seconds
 	//
 	// optional
-	Duration int `json:"video_duration"`
+	Duration int `json:"video_duration" bson:"video_duration"`
 	// Description short description of the result
 	//
 	// optional
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the video.
 	// This field is required if InlineQueryResultVideo is used to send
 	// an HTML-page as a result (e.g., a YouTube video).
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultCachedVideo is an inline query response with cached video.
@@ -1676,41 +1676,41 @@ type InlineQueryResultCachedVideo struct {
 	// Type of the result, must be video
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// VideoID a valid file identifier for the video file
 	//
 	// required
-	VideoID string `json:"video_file_id"`
+	VideoID string `json:"video_file_id" bson:"video_file_id"`
 	// Title for the result
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Description short description of the result
 	//
 	// optional
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// Caption of the video to be sent, 0-1024 characters after entities parsing
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the video caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the video
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultCachedSticker is an inline query response with cached sticker.
@@ -1718,31 +1718,31 @@ type InlineQueryResultCachedSticker struct {
 	// Type of the result, must be sticker
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// StickerID a valid file identifier of the sticker
 	//
 	// required
-	StickerID string `json:"sticker_file_id"`
+	StickerID string `json:"sticker_file_id" bson:"sticker_file_id"`
 	// Title is a title
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// ParseMode mode for parsing entities in the video caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the sticker
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultAudio is an inline query response audio.
@@ -1750,39 +1750,39 @@ type InlineQueryResultAudio struct {
 	// Type of the result, must be audio
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// URL a valid url for the audio file
 	//
 	// required
-	URL string `json:"audio_url"`
+	URL string `json:"audio_url" bson:"audio_url"`
 	// Title is a title
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Caption 0-1024 characters after entities parsing
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// Performer is a performer
 	//
 	// optional
-	Performer string `json:"performer"`
+	Performer string `json:"performer" bson:"performer"`
 	// Duration audio duration in seconds
 	//
 	// optional
-	Duration int `json:"audio_duration"`
+	Duration int `json:"audio_duration" bson:"audio_duration"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the audio
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultCachedAudio is an inline query response with cached audio.
@@ -1790,33 +1790,33 @@ type InlineQueryResultCachedAudio struct {
 	// Type of the result, must be audio
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// AudioID a valid file identifier for the audio file
 	//
 	// required
-	AudioID string `json:"audio_file_id"`
+	AudioID string `json:"audio_file_id" bson:"audio_file_id"`
 	// Caption 0-1024 characters after entities parsing
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the video caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the audio
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultVoice is an inline query response voice.
@@ -1824,35 +1824,35 @@ type InlineQueryResultVoice struct {
 	// Type of the result, must be voice
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// URL a valid URL for the voice recording
 	//
 	// required
-	URL string `json:"voice_url"`
+	URL string `json:"voice_url" bson:"voice_url"`
 	// Title recording title
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Caption 0-1024 characters after entities parsing
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// Duration recording duration in seconds
 	//
 	// optional
-	Duration int `json:"voice_duration"`
+	Duration int `json:"voice_duration" bson:"voice_duration"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the voice recording
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultCachedVoice is an inline query response with cached voice.
@@ -1860,37 +1860,37 @@ type InlineQueryResultCachedVoice struct {
 	// Type of the result, must be voice
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// VoiceID a valid file identifier for the voice message
 	//
 	// required
-	VoiceID string `json:"voice_file_id"`
+	VoiceID string `json:"voice_file_id" bson:"voice_file_id"`
 	// Title voice message title
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Caption 0-1024 characters after entities parsing
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// ParseMode mode for parsing entities in the video caption.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the voice message
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultDocument is an inline query response document.
@@ -1898,51 +1898,51 @@ type InlineQueryResultDocument struct {
 	// Type of the result, must be document
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// Title for the result
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Caption of the document to be sent, 0-1024 characters after entities parsing
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// URL a valid url for the file
 	//
 	// required
-	URL string `json:"document_url"`
+	URL string `json:"document_url" bson:"document_url"`
 	// MimeType of the content of the file, either “application/pdf” or “application/zip”
 	//
 	// required
-	MimeType string `json:"mime_type"`
+	MimeType string `json:"mime_type" bson:"mime_type"`
 	// Description short description of the result
 	//
 	// optional
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// ReplyMarkup nline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the file
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 	// ThumbURL url of the thumbnail (jpeg only) for the file
 	//
 	// optional
-	ThumbURL string `json:"thumb_url"`
+	ThumbURL string `json:"thumb_url" bson:"thumb_url"`
 	// ThumbWidth thumbnail width
 	//
 	// optional
-	ThumbWidth int `json:"thumb_width"`
+	ThumbWidth int `json:"thumb_width" bson:"thumb_width"`
 	// ThumbHeight thumbnail height
 	//
 	// optional
-	ThumbHeight int `json:"thumb_height"`
+	ThumbHeight int `json:"thumb_height" bson:"thumb_height"`
 }
 
 // InlineQueryResultCachedDocument is an inline query response with cached document.
@@ -1950,41 +1950,41 @@ type InlineQueryResultCachedDocument struct {
 	// Type of the result, must be document
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// DocumentID a valid file identifier for the file
 	//
 	// required
-	DocumentID string `json:"document_file_id"`
+	DocumentID string `json:"document_file_id" bson:"document_file_id"`
 	// Title for the result
 	//
 	// optional
-	Title string `json:"title"` // required
+	Title string `json:"title" bson:"title"` // required
 	// Caption of the document to be sent, 0-1024 characters after entities parsing
 	//
 	// optional
-	Caption string `json:"caption"`
+	Caption string `json:"caption" bson:"caption"`
 	// Description short description of the result
 	//
 	// optional
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// ParseMode mode for parsing entities in the video caption.
 	//	// See formatting options for more details
 	//	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the file
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 }
 
 // InlineQueryResultLocation is an inline query response location.
@@ -1992,43 +1992,43 @@ type InlineQueryResultLocation struct {
 	// Type of the result, must be location
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 Bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// Latitude  of the location in degrees
 	//
 	// required
-	Latitude float64 `json:"latitude"`
+	Latitude float64 `json:"latitude" bson:"latitude"`
 	// Longitude of the location in degrees
 	//
 	// required
-	Longitude float64 `json:"longitude"`
+	Longitude float64 `json:"longitude" bson:"longitude"`
 	// Title of the location
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the location
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 	// ThumbURL url of the thumbnail for the result
 	//
 	// optional
-	ThumbURL string `json:"thumb_url"`
+	ThumbURL string `json:"thumb_url" bson:"thumb_url"`
 	// ThumbWidth thumbnail width
 	//
 	// optional
-	ThumbWidth int `json:"thumb_width"`
+	ThumbWidth int `json:"thumb_width" bson:"thumb_width"`
 	// ThumbHeight thumbnail height
 	//
 	// optional
-	ThumbHeight int `json:"thumb_height"`
+	ThumbHeight int `json:"thumb_height" bson:"thumb_height"`
 }
 
 // InlineQueryResultVenue is an inline query response venue.
@@ -2036,56 +2036,56 @@ type InlineQueryResultVenue struct {
 	// Type of the result, must be venue
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 Bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// Latitude of the venue location in degrees
 	//
 	// required
-	Latitude float64 `json:"latitude"`
+	Latitude float64 `json:"latitude" bson:"latitude"`
 	// Longitude of the venue location in degrees
 	//
 	// required
-	Longitude float64 `json:"longitude"`
+	Longitude float64 `json:"longitude" bson:"longitude"`
 	// Title of the venue
 	//
 	// required
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Address of the venue
 	//
 	// required
-	Address string `json:"address"`
+	Address string `json:"address" bson:"address"`
 	// FoursquareID foursquare identifier of the venue if known
 	//
 	// optional
-	FoursquareID string `json:"foursquare_id"`
+	FoursquareID string `json:"foursquare_id" bson:"foursquare_id"`
 	// FoursquareType foursquare type of the venue, if known.
 	// (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
 	//
 	// optional
-	FoursquareType string `json:"foursquare_type"`
+	FoursquareType string `json:"foursquare_type" bson:"foursquare_type"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 	// InputMessageContent content of the message to be sent instead of the venue
 	//
 	// optional
-	InputMessageContent interface{} `json:"input_message_content,omitempty"`
+	InputMessageContent interface{} `json:"input_message_content,omitempty" bson:"input_message_content,omitempty"`
 	// ThumbURL url of the thumbnail for the result
 	//
 	// optional
-	ThumbURL string `json:"thumb_url"`
+	ThumbURL string `json:"thumb_url" bson:"thumb_url"`
 	// ThumbWidth thumbnail width
 	//
 	// optional
-	ThumbWidth int `json:"thumb_width"`
+	ThumbWidth int `json:"thumb_width" bson:"thumb_width"`
 	// ThumbHeight thumbnail height
 	//
 	// optional
-	ThumbHeight int `json:"thumb_height"`
+	ThumbHeight int `json:"thumb_height" bson:"thumb_height"`
 }
 
 // InlineQueryResultGame is an inline query response game.
@@ -2093,144 +2093,144 @@ type InlineQueryResultGame struct {
 	// Type of the result, must be game
 	//
 	// required
-	Type string `json:"type"`
+	Type string `json:"type" bson:"type"`
 	// ID unique identifier for this result, 1-64 bytes
 	//
 	// required
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// GameShortName short name of the game
 	//
 	// required
-	GameShortName string `json:"game_short_name"`
+	GameShortName string `json:"game_short_name" bson:"game_short_name"`
 	// ReplyMarkup inline keyboard attached to the message
 	//
 	// optional
-	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup *InlineKeyboardMarkup `json:"reply_markup,omitempty" bson:"reply_markup,omitempty"`
 }
 
 // ChosenInlineResult is an inline query result chosen by a User
 type ChosenInlineResult struct {
 	// ResultID the unique identifier for the result that was chosen
-	ResultID string `json:"result_id"`
+	ResultID string `json:"result_id" bson:"result_id"`
 	// From the user that chose the result
-	From *User `json:"from"`
+	From *User `json:"from" bson:"from"`
 	// Location sender location, only for bots that require user location
 	//
 	// optional
-	Location *Location `json:"location"`
+	Location *Location `json:"location" bson:"location"`
 	// InlineMessageID identifier of the sent inline message.
 	// Available only if there is an inline keyboard attached to the message.
 	// Will be also received in callback queries and can be used to edit the message.
 	//
 	// optional
-	InlineMessageID string `json:"inline_message_id"`
+	InlineMessageID string `json:"inline_message_id" bson:"inline_message_id"`
 	// Query the query that was used to obtain the result
-	Query string `json:"query"`
+	Query string `json:"query" bson:"query"`
 }
 
 // InputTextMessageContent contains text for displaying
 // as an inline query result.
 type InputTextMessageContent struct {
 	// Text of the message to be sent, 1-4096 characters
-	Text string `json:"message_text"`
+	Text string `json:"message_text" bson:"message_text"`
 	// ParseMode mode for parsing entities in the message text.
 	// See formatting options for more details
 	// (https://core.telegram.org/bots/api#formatting-options).
 	//
 	// optional
-	ParseMode string `json:"parse_mode"`
+	ParseMode string `json:"parse_mode" bson:"parse_mode"`
 	// DisableWebPagePreview disables link previews for links in the sent message
 	//
 	// optional
-	DisableWebPagePreview bool `json:"disable_web_page_preview"`
+	DisableWebPagePreview bool `json:"disable_web_page_preview" bson:"disable_web_page_preview"`
 }
 
 // InputLocationMessageContent contains a location for displaying
 // as an inline query result.
 type InputLocationMessageContent struct {
 	// Latitude of the location in degrees
-	Latitude float64 `json:"latitude"`
+	Latitude float64 `json:"latitude" bson:"latitude"`
 	// Longitude of the location in degrees
-	Longitude float64 `json:"longitude"`
+	Longitude float64 `json:"longitude" bson:"longitude"`
 }
 
 // InputVenueMessageContent contains a venue for displaying
 // as an inline query result.
 type InputVenueMessageContent struct {
 	// Latitude of the venue in degrees
-	Latitude float64 `json:"latitude"`
+	Latitude float64 `json:"latitude" bson:"latitude"`
 	// Longitude of the venue in degrees
-	Longitude float64 `json:"longitude"`
+	Longitude float64 `json:"longitude" bson:"longitude"`
 	// Title name of the venue
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Address of the venue
-	Address string `json:"address"`
+	Address string `json:"address" bson:"address"`
 	// FoursquareID foursquare identifier of the venue, if known
 	//
 	// optional
-	FoursquareID string `json:"foursquare_id"`
+	FoursquareID string `json:"foursquare_id" bson:"foursquare_id"`
 }
 
 // InputContactMessageContent contains a contact for displaying
 // as an inline query result.
 type InputContactMessageContent struct {
 	// 	PhoneNumber contact's phone number
-	PhoneNumber string `json:"phone_number"`
+	PhoneNumber string `json:"phone_number" bson:"phone_number"`
 	// FirstName contact's first name
-	FirstName string `json:"first_name"`
+	FirstName string `json:"first_name" bson:"first_name"`
 	// LastName contact's last name
 	//
 	// optional
-	LastName string `json:"last_name"`
+	LastName string `json:"last_name" bson:"last_name"`
 }
 
 // Invoice contains basic information about an invoice.
 type Invoice struct {
 	// Title product name
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Description product description
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 	// StartParameter unique bot deep-linking parameter that can be used to generate this invoice
-	StartParameter string `json:"start_parameter"`
+	StartParameter string `json:"start_parameter" bson:"start_parameter"`
 	// Currency three-letter ISO 4217 currency code
 	// (see https://core.telegram.org/bots/payments#supported-currencies)
-	Currency string `json:"currency"`
+	Currency string `json:"currency" bson:"currency"`
 	// TotalAmount total price in the smallest units of the currency (integer, not float/double).
 	// For example, for a price of US$ 1.45 pass amount = 145.
 	// See the exp parameter in currencies.json
 	// (https://core.telegram.org/bots/payments/currencies.json),
 	// it shows the number of digits past the decimal point
 	// for each currency (2 for the majority of currencies).
-	TotalAmount int `json:"total_amount"`
+	TotalAmount int `json:"total_amount" bson:"total_amount"`
 }
 
 // LabeledPrice represents a portion of the price for goods or services.
 type LabeledPrice struct {
 	// Label portion label
-	Label string `json:"label"`
+	Label string `json:"label" bson:"label"`
 	// Amount price of the product in the smallest units of the currency (integer, not float/double).
 	// For example, for a price of US$ 1.45 pass amount = 145.
 	// See the exp parameter in currencies.json
 	// (https://core.telegram.org/bots/payments/currencies.json),
 	// it shows the number of digits past the decimal point
 	// for each currency (2 for the majority of currencies).
-	Amount int `json:"amount"`
+	Amount int `json:"amount" bson:"amount"`
 }
 
 // ShippingAddress represents a shipping address.
 type ShippingAddress struct {
 	// CountryCode ISO 3166-1 alpha-2 country code
-	CountryCode string `json:"country_code"`
+	CountryCode string `json:"country_code" bson:"country_code"`
 	// State if applicable
-	State string `json:"state"`
+	State string `json:"state" bson:"state"`
 	// City city
-	City string `json:"city"`
+	City string `json:"city" bson:"city"`
 	// StreetLine1 first line for the address
-	StreetLine1 string `json:"street_line1"`
+	StreetLine1 string `json:"street_line1" bson:"street_line1"`
 	// StreetLine2 second line for the address
-	StreetLine2 string `json:"street_line2"`
+	StreetLine2 string `json:"street_line2" bson:"street_line2"`
 	// PostCode address post code
-	PostCode string `json:"post_code"`
+	PostCode string `json:"post_code" bson:"post_code"`
 }
 
 // OrderInfo represents information about an order.
@@ -2238,97 +2238,97 @@ type OrderInfo struct {
 	// Name user name
 	//
 	// optional
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty" bson:"name,omitempty"`
 	// PhoneNumber user's phone number
 	//
 	// optional
-	PhoneNumber string `json:"phone_number,omitempty"`
+	PhoneNumber string `json:"phone_number,omitempty" bson:"phone_number,omitempty"`
 	// Email user email
 	//
 	// optional
-	Email string `json:"email,omitempty"`
+	Email string `json:"email,omitempty" bson:"email,omitempty"`
 	// ShippingAddress user shipping address
 	//
 	// optional
-	ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
+	ShippingAddress *ShippingAddress `json:"shipping_address,omitempty" bson:"shipping_address,omitempty"`
 }
 
 // ShippingOption represents one shipping option.
 type ShippingOption struct {
 	// ID shipping option identifier
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// Title option title
-	Title string `json:"title"`
+	Title string `json:"title" bson:"title"`
 	// Prices list of price portions
-	Prices *[]LabeledPrice `json:"prices"`
+	Prices *[]LabeledPrice `json:"prices" bson:"prices"`
 }
 
 // SuccessfulPayment contains basic information about a successful payment.
 type SuccessfulPayment struct {
 	// Currency three-letter ISO 4217 currency code
 	// (see https://core.telegram.org/bots/payments#supported-currencies)
-	Currency string `json:"currency"`
+	Currency string `json:"currency" bson:"currency"`
 	// TotalAmount total price in the smallest units of the currency (integer, not float/double).
 	// For example, for a price of US$ 1.45 pass amount = 145.
 	// See the exp parameter in currencies.json,
 	// (https://core.telegram.org/bots/payments/currencies.json)
 	// it shows the number of digits past the decimal point
 	// for each currency (2 for the majority of currencies).
-	TotalAmount int `json:"total_amount"`
+	TotalAmount int `json:"total_amount" bson:"total_amount"`
 	// InvoicePayload bot specified invoice payload
-	InvoicePayload string `json:"invoice_payload"`
+	InvoicePayload string `json:"invoice_payload" bson:"invoice_payload"`
 	// ShippingOptionID identifier of the shipping option chosen by the user
 	//
 	// optional
-	ShippingOptionID string `json:"shipping_option_id,omitempty"`
+	ShippingOptionID string `json:"shipping_option_id,omitempty" bson:"shipping_option_id,omitempty"`
 	// OrderInfo order info provided by the user
 	//
 	// optional
-	OrderInfo *OrderInfo `json:"order_info,omitempty"`
+	OrderInfo *OrderInfo `json:"order_info,omitempty" bson:"order_info,omitempty"`
 	// TelegramPaymentChargeID telegram payment identifier
-	TelegramPaymentChargeID string `json:"telegram_payment_charge_id"`
+	TelegramPaymentChargeID string `json:"telegram_payment_charge_id" bson:"telegram_payment_charge_id"`
 	// ProviderPaymentChargeID provider payment identifier
-	ProviderPaymentChargeID string `json:"provider_payment_charge_id"`
+	ProviderPaymentChargeID string `json:"provider_payment_charge_id" bson:"provider_payment_charge_id"`
 }
 
 // ShippingQuery contains information about an incoming shipping query.
 type ShippingQuery struct {
 	// ID unique query identifier
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// From user who sent the query
-	From *User `json:"from"`
+	From *User `json:"from" bson:"from"`
 	// InvoicePayload bot specified invoice payload
-	InvoicePayload string `json:"invoice_payload"`
+	InvoicePayload string `json:"invoice_payload" bson:"invoice_payload"`
 	// ShippingAddress user specified shipping address
-	ShippingAddress *ShippingAddress `json:"shipping_address"`
+	ShippingAddress *ShippingAddress `json:"shipping_address" bson:"shipping_address"`
 }
 
 // PreCheckoutQuery contains information about an incoming pre-checkout query.
 type PreCheckoutQuery struct {
 	// ID unique query identifier
-	ID string `json:"id"`
+	ID string `json:"id" bson:"_id,omitempty"`
 	// From user who sent the query
-	From *User `json:"from"`
+	From *User `json:"from" bson:"from"`
 	// Currency three-letter ISO 4217 currency code
 	//	// (see https://core.telegram.org/bots/payments#supported-currencies)
-	Currency string `json:"currency"`
+	Currency string `json:"currency" bson:"currency"`
 	// TotalAmount total price in the smallest units of the currency (integer, not float/double).
 	//	// For example, for a price of US$ 1.45 pass amount = 145.
 	//	// See the exp parameter in currencies.json,
 	//	// (https://core.telegram.org/bots/payments/currencies.json)
 	//	// it shows the number of digits past the decimal point
 	//	// for each currency (2 for the majority of currencies).
-	TotalAmount int `json:"total_amount"`
+	TotalAmount int `json:"total_amount" bson:"total_amount"`
 	// InvoicePayload bot specified invoice payload
-	InvoicePayload string `json:"invoice_payload"`
+	InvoicePayload string `json:"invoice_payload" bson:"invoice_payload"`
 	// ShippingOptionID identifier of the shipping option chosen by the user
 	//
 	// optional
-	ShippingOptionID string `json:"shipping_option_id,omitempty"`
+	ShippingOptionID string `json:"shipping_option_id,omitempty" bson:"shipping_option_id,omitempty"`
 	// OrderInfo order info provided by the user
 	//
 	// optional
-	OrderInfo *OrderInfo `json:"order_info,omitempty"`
+	OrderInfo *OrderInfo `json:"order_info,omitempty" bson:"order_info,omitempty"`
 }
 
 // Error is an error containing extra information returned by the Telegram API.
@@ -2346,7 +2346,7 @@ func (e Error) Error() string {
 type BotCommand struct {
 	// Command text of the command, 1-32 characters.
 	// Can contain only lowercase English letters, digits and underscores.
-	Command string `json:"command"`
+	Command string `json:"command" bson:"command"`
 	// Description of the command, 3-256 characters.
-	Description string `json:"description"`
+	Description string `json:"description" bson:"description"`
 }
